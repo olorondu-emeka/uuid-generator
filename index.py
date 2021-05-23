@@ -5,25 +5,35 @@ import redis
 import uuid
 
 # connect to redis
-redisClient = redis.Redis(host='localhost', port=6379)
+redisClient = redis.Redis(host='localhost', port=6379,
+                          charset="utf-8", decode_responses=True)
 
 
 class ServiceHandler(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+
     def do_GET(self):
         currentTimestamp = str(datetime.now())
         simpleUUID = uuid.uuid1()
 
-        redisClient.hset('uuid', currentTimestamp, str(simpleUUID.hex))
-        finalData = redisClient.hgetall('uuid')
+        redisClient.hset('uuid-set', currentTimestamp, simpleUUID.hex)
+        finalData = redisClient.hgetall('uuid-set')
+        print(finalData)
 
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps(finalData))
-
-        # self.wfile.write(json.dumps(finalData).encode())
+        self._set_headers()
+        self.wfile.write(json.dumps(finalData).encode('utf-8'))
 
 
 # Server Initialization
-server = HTTPServer(('localhost', 8080), ServiceHandler)
-server.serve_forever()
+def run():
+    server_address = ('localhost', 5000)
+    httpd = HTTPServer(server_address, ServiceHandler)
+    print('serving at %s:%d' % server_address)
+    httpd.serve_forever()
+
+
+run()
