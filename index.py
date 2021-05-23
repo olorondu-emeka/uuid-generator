@@ -22,7 +22,6 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
         redisClient.hset('uuid-set', currentTimestamp, simpleUUID.hex)
         finalData = redisClient.hgetall('uuid-set')
-        print(finalData)
 
         self._set_headers()
         self.wfile.write(json.dumps(finalData).encode('utf-8'))
