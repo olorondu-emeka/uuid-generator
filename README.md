@@ -54,7 +54,7 @@ This starts the **redis-cli** on your local machine.
 
 ### API Request
 
-This project ahs only a single route, which is a **GET** request that can be accessed on:
+This project has only a single route, which is a **GET** request that can be accessed on:
 
 ```bash
 http://localhost:5000/
