@@ -52,6 +52,14 @@ docker exec -it uuid-generator_redis_1 redis-cli
 
 This starts the **redis-cli** on your local machine.
 
+### API Request
+
+This project ahs only a single route, which is a **GET** request that can be accessed on:
+
+```bash
+http://localhost:5000/
+```
+
 ## Built With
 
 - [Python](https://python.org/)
